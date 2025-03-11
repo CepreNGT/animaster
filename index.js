@@ -134,23 +134,27 @@ function animaster() {
             return this;
         },
         play(element) {
+            let lastDuration = 0;
             for (const step of this._steps) {
                 switch (step.func) {
                     case 'move':
-                        this.move(element, step.duration, step.extra);
+                        setTimeout(this.move, lastDuration, element, step.duration, step.extra)
+                        lastDuration = step.duration;
                         break;
                     case 'fadeIn':
-                        this.fadeIn(element, step.duration);
+                        setTimeout(this.fadeIn, lastDuration, element, step.duration)
+                        lastDuration = step.duration;
                         break;
                     case 'fadeOut':
-                        this.fadeOut(element, step.duration);
+                        setTimeout(this.fadeOut, lastDuration, element, step.duration)
+                        lastDuration = step.duration;
                         break;
                     case 'scale':
-                        this.scale(element, step.duration, step.extra);
+                        setTimeout(this.scale, lastDuration, element, step.duration, step.extra)
+                        lastDuration = step.duration;
                         break;
                 }
             }
-            this._steps = [];
         },
         fadeIn(element, duration) {
             element.style.transitionDuration =  `${duration}ms`;
