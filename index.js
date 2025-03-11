@@ -1,5 +1,8 @@
 addListeners();
 
+
+let heartBeating;
+
 function addListeners() {
     document.getElementById('fadeInPlay')
         .addEventListener('click', function () {
@@ -20,8 +23,27 @@ function addListeners() {
         });
     document.getElementById('fadeOutPlay')
         .addEventListener('click', function () {
-            const block = document.getElementById('fadeOutPlay');
+            const block = document.getElementById('fadeOutBlock');
             animaster().fadeOut(block, 5000);
+        });
+    document.getElementById('moveAndHidePlay')
+        .addEventListener('click', function () {
+            const block = document.getElementById('moveAndHideBlock');
+            animaster().moveAndHide(block, 5000);
+        });
+    document.getElementById('showAndHidePlay')
+        .addEventListener('click', function () {
+            const block = document.getElementById('showAndHideBlock');
+            animaster().showAndHide(block, 5000);
+        });
+    document.getElementById('heartBeatingPlay')
+        .addEventListener('click', function () {
+            const block = document.getElementById('heartBeatingBlock');
+            heartBeating = animaster().heartBeating(block);
+        });
+    document.getElementById('heartBeatingStop')
+        .addEventListener('click', function () {
+            heartBeating.stop();
         });
 }
 
@@ -78,6 +100,27 @@ function animaster() {
             element.classList.remove('show');
             element.classList.add('hide');
         },
+        moveAndHide(element, duration) {
+            this.move(element, duration * 0.4, {x: 100, y: 20});
+            setTimeout(this.fadeOut, duration * 0.4, element, duration * 0.6)
+        },
+        showAndHide(element, duration) {
+            const stepDuration = duration / 3;
+            this.fadeIn(element, stepDuration);
+            setTimeout(this.fadeOut, stepDuration * 2, element, stepDuration);
+        },
+        heartBeating(element) {
+            const animate = () => {
+                this.scale(element, 500, 1.4);
+                setTimeout(this.scale, 500, element, 500, 1);
+            };
+            const interval = setInterval(animate, 1000);
+            return {
+                stop() {
+                    clearInterval(interval);
+                }
+            }
+        }
     }
 }
 
